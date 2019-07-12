@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>The Button That Does Things</title>
+</head>
+
+<body>
+  <button id="button1">HOCKEY</button>
+  <button id="button2">Gundam</button>
+  <button id="button3">Formula 1</button>
+  <button id="button4">Daft Punk</button>
+  <button id="button5">Computers</button>
+  <div id="gifs should show up here">
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript">
+
+var topics = ["hockey", "gundam", "formula 1", "daft punk", "computers"]
+
+
+   $("#button1").on("click", function() {
+    var queryURL = "https://api.giphy.com/v1/gifs/random?api_key=VLA6zkje6AbDqGhgkzlf87c6BiJ8e9nH=hockey";
+    //var queryURL = "https://api.giphy.com/v1/gifs/random?api_key=TtY1Itg72OWsbKsC2cHEfwA4y9qxR0iJ=gundam";
+
+    $.ajax({
+        url: queryURL,
+        method: "GET"
+      })
+      .then(function(response) {
+          // Storing an array of results in the results variable
+          var results = response.data;
+
+          // Looping over every result item
+          for (var i = 0; i < results.length; i++) {
+
+            // Only taking action if the photo has an appropriate rating
+            if (results[i].rating !== "r" && results[i].rating !== "pg-13") {
+              // Creating a div for the gif
+              var gifDiv = $("<div>");
+
+              // Storing the result item's rating
+              var rating = results[i].rating;
+
+              // Creating a paragraph tag with the result item's rating
+              var p = $("<p>").text("Rating: " + rating);
+
+              // Creating an image tag
+              var topicImage = $("<img>");
+
+              // Giving the image tag an src attribute of a proprty pulled off the
+              // result item
+              topicImage.attr("src", results[i].images.fixed_height.url);
+
+              // Appending the paragraph and topicImage we created to the "gifDiv" div we created
+              gifDiv.append(p);
+              gifDiv.append(topicImage);
+
+              // Prepending the gifDiv to the "#gifs-appear-here" div in the HTML
+              $("#gifs should show up here").prepend(gifDiv);
+            }
+          }
+        });
+    });
+
+
+
+
+
+   
+
+
+
+
+
+  
+  
+  
+  </script>
+
+
+
+
