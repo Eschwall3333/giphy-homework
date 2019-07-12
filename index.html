@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Favorite Movies</title>
+    <style type="text/css">
+      button,
+      div,
+      form,
+      input {
+        margin: 10px;
+      }
+    </style>
+  </head>
+  
+  <body>
+  
+    <div class="container">
+      <h1>The Button That Does Things</h1>
+  
+      <div id="buttons-view"></div>
+  
+      <form id="topic-form">
+        <label for="user-input">What you thinkin???</label>
+        <input type="text" id="topic-input"><br>
+  
+        <input id="add-topic" type="submit" value="What you thinkin???">
+      </form>
+
+      <button data-topic="hockey">Break-away!!</button>
+      <button data-topic="gundam">Battling mech-suits in space
+      </button>
+     
+      <button data-topic="Formula 1">Ferarri
+      </button>
+      <button data-topic="daft punk">Daft Punk!!
+    
+      </button>
+      <button data-topic="computers">Macbook Pro
+       
+      </button>
+    
+      <div id="gifs-show-up-here">
+      </div>
+    
+  
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+      <script type="text/javascript">
+        // Initial array of topics
+        var topics = ["hockey", " gundam", "formula 1", "daft punk", "computers"];
+  
+        function alerttopicName() {
+          var topicName = $(this).attr("data-name");
+  
+          alert(topicName);
+        }
+  
+        function renderButtons() {
+  
+          $("#buttons-view").empty();
+  
+          for (var i = 0; i < topics.length; i++) {
+  
+            var a = $("<button>");
+            a.addClass("topic");
+            a.attr("data-name", topics[i]);
+            a.text(topics[i]);
+            $("#buttons-view").append(a);
+          }
+        }
+  
+        $("#add-topic").on("click", function(event) {
+          event.preventDefault();
+          var topic = $("#topic-input").val().trim();
+  
+          topics.push(topic);
+  
+          renderButtons();
+  
+        });
+  
+        
+        $(document).on("click", ".topic", alerttopicName);
+  
+        renderButtons();
+
+        $("button").on("click", function() {
+  var topic = $(this).attr("data-topic");
+
+  var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+    topic + "&api_key=VLA6zkje6AbDqGhgkzlf87c6BiJ8e9nH&limit=10";
+
+    var queryState = "data-state"
+  $.ajax({
+    url: queryURL,
+    method: "GET"
+  })
+    .then(function(response) {
+      var results = response.data;
+
+      for (var i = 0; i < results.length; i++) {
+
+        if (results[i].rating !== "r" && results[i].rating !== "pg-13") {
+          var gifDiv = $("<div>");
+
+          var rating = results[i].rating;
+
+          var p = $("<p>").text("Rating: " + rating);
+
+          var topicImage = $("<img>");
+
+          topicImage.attr("src", results[i].images.fixed_height.url);
+
+          gifDiv.append(p);
+          gifDiv.append(topicImage);
+
+          $("#gifs-show-up-here").prepend(gifDiv);
+        }
+      }
+    });
+});
+
+$("queryUrl").on("click", function() {
+  var queryState = $(this).attr("data-state");
+ 
+  if (state === "still") {
+    $(this).attr("src", $(this).attr("data-animate"));
+    $(this).attr("data-state", "animate");
+  } else {
+    $(this).attr("src", $(this).attr("data-still"));
+    $(this).attr("data-state", "still");
+  }
+});
+
+
+
+
+      </script>
+    </div>
+  </body>
+  
+  </html>
+  
